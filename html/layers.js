@@ -155,6 +155,44 @@ function createBaseLayers() {
             type: 'base',
         }));
     }
+
+    if (!adsbexchange) {
+        fanmap.push(new ol.layer.Tile({
+            source: new ol.source.XYZ({
+                "url": "https://tiles.flightradar24.com/navdata_ha/{z}/{x}/{y}/tile.png",
+                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
+                attributionsCollapsible: false,
+                maxZoom: 19,
+                transition: tileTransition,
+            }),
+            name: 'navdata',
+            title: '航空导航数据',
+            type: 'overlay',
+            opacity: 0.7,
+            visible: false,
+            zIndex: 102,
+            maxZoom: 19,
+        }));
+    }
+
+    if (!adsbexchange) {
+        fanmap.push(new ol.layer.Tile({
+            source: new ol.source.XYZ({
+                "url": "https://tiles.flightradar24.com/atc_boundaries/{z}/{x}/{y}/tile.png",
+                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
+                attributionsCollapsible: false,
+                maxZoom: 19,
+                transition: tileTransition,
+            }),
+            name: 'navdata',
+            title: 'ATC边界',
+            type: 'overlay',
+            opacity: 0.7,
+            visible: false,
+            zIndex: 102,
+            maxZoom: 19,
+        }));
+    }
     
     if (true) {
         const getRainviewerLayers = async function (key) {
