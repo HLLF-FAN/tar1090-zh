@@ -157,7 +157,7 @@ function createBaseLayers() {
     }
 
     if (!adsbexchange) {
-        fanmap.push(new ol.layer.Tile({
+        mapmap.push(new ol.layer.Tile({
             source: new ol.source.XYZ({
                 "url": "https://tiles.flightradar24.com/navdata_ha/{z}/{x}/{y}/tile.png",
                 attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
@@ -176,7 +176,7 @@ function createBaseLayers() {
     }
 
     if (!adsbexchange) {
-        fanmap.push(new ol.layer.Tile({
+        mapmap.push(new ol.layer.Tile({
             source: new ol.source.XYZ({
                 "url": "https://tiles.flightradar24.com/atc_boundaries/{z}/{x}/{y}/tile.png",
                 attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
