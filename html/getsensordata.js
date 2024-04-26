@@ -16,7 +16,7 @@ function updateData() {
 setInterval(updateData, 1000);
 
 function callAPI() {
-  fetch('https://api.fanstudio.tech:60225/aviation/metartaf.php?airport=zuuu')
+  fetch('https://api.fanstudio.tech:60225/aviation/metartaf.php?airport=这里填你要查询的机场ICAO码')
     .then(response => response.json())
     .then(data => {
       const metar = data.metar;
@@ -39,7 +39,7 @@ callAPI();
 setInterval(callAPI, 3600000);
 
 function updateDeviceData() {
-  fetch('https://api.fanstudio.tech:60225/aviation/devicedata.php?uuid=96eab827eb7f6296')
+  fetch('https://api.fanstudio.tech:60225/feeyo/test/device-data.php?uuid=这里填你的站点uuid')
     .then(response => response.json())
     .then(data => {
       const message_count = data.data[0].message_count;
