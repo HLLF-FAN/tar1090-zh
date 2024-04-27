@@ -24,8 +24,8 @@ function callAPI() {
 
       console.log('METAR:', metar);
       console.log('TAF:', taf);
-      document.getElementById('metar-zuuu').textContent = metar;
-      document.getElementById('taf-zuuu').textContent = taf;
+      document.getElementById('metar').textContent = metar;
+      document.getElementById('taf').textContent = taf;
     })
     .catch(error => {
       console.error('调用API时发生错误:', error);
