@@ -63,7 +63,7 @@ updateDeviceData();
 // 当前版本号
 const currentVersion = "24.04.29";
 
-fetch('https://api.fanstudio.tech:60225/feeyo/test/tar1090-ver.json')
+fetch('https://api.fanstudio.tech:60225/feeyo/test/tar1090-ver.php')
     .then(response => response.json())
     .then(data => {
         const latestVersion = data.version;
