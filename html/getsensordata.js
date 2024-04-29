@@ -70,7 +70,11 @@ fetch('https://api.fanstudio.tech:60225/feeyo/test/tar1090-ver.php')
         // 比较版本号
         if (compareVersions(currentVersion, latestVersion) < 0) {
             const updateMessage = document.getElementById("updateMessage");
-            updateMessage.innerHTML = "有新版本可用，请及时更新！";
+            if (updateMessage) {
+                updateMessage.innerHTML = "有新版本可用，请及时更新！";
+            } else {
+                console.error('找不到更新提示的HTML元素');
+            }
         }
     })
     .catch(error => console.error('获取最新版本号时出错:', error));
