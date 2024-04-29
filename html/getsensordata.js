@@ -59,3 +59,41 @@ function updateDeviceData() {
 }
 
 updateDeviceData();
+
+// 当前版本号
+const currentVersion = "24.04.29";
+
+// 从GitHub仓库获取最新版本号
+fetch('https://raw.githubusercontent.com/HLLF-FAN/tar1090-zh/master/ver.json')
+    .then(response => response.json())
+    .then(data => {
+        const latestVersion = data.version;
+        // 比较版本号
+        if (compareVersions(currentVersion, latestVersion) < 0) {
+            const updateMessage = document.getElementById("updateMessage");
+            updateMessage.innerHTML = "有新版本可用，请及时更新！";
+        }
+    })
+    .catch(error => console.error('获取最新版本号时出错:', error));
+
+// 版本号比较函数
+function compareVersions(version1, version2) {
+    const v1 = version1.split('.');
+    const v2 = version2.split('.');
+    
+    for (let i = 0; i < v1.length; i++) {
+        if (parseInt(v1[i]) > parseInt(v2[i])) {
+            return 1;
+        } else if (parseInt(v1[i]) < parseInt(v2[i])) {
+            return -1;
+        }
+    }
+    
+    if (v1.length < v2.length) {
+        return -1;
+    } else if (v1.length > v2.length) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
