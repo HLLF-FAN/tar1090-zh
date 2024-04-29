@@ -63,8 +63,7 @@ updateDeviceData();
 // 当前版本号
 const currentVersion = "24.04.29";
 
-// 从GitHub仓库获取最新版本号
-fetch('https://raw.githubusercontent.com/HLLF-FAN/tar1090-zh/master/ver.json')
+fetch('https://api.fanstudio.tech:60225/feeyo/test/tar1090-ver.json')
     .then(response => response.json())
     .then(data => {
         const latestVersion = data.version;
