@@ -2,10 +2,22 @@ function updateData() {
   fetch('/pi-dashboard/?ajax=true')
     .then(response => response.json())
     .then(data => {
+      // 提取 CPU 温度
       const deviceTemperature = parseFloat(data.cpu.temp[0]) / 1000;
+      // 提取 uptime 并转换为秒
+      const uptimeInSeconds = parseFloat(data.uptime);
 
+      // 打印并更新 CPU 温度
       console.log('cpu temp:', deviceTemperature);
       document.getElementById('device-temperature').textContent = `${deviceTemperature}°C`;
+
+      // 将 uptime 从秒转换为天数
+      const secondsPerDay = 24 * 60 * 60;
+      const uptimeInDays = uptimeInSeconds / secondsPerDay;
+
+      // 打印并更新 uptime 为天数
+      console.log('uptime in days:', uptimeInDays);
+      document.getElementById('device-uptime').textContent = `${uptimeInDays.toFixed(2)}天`;
     })
     .catch(error => {
       console.error('发生错误:', error);
