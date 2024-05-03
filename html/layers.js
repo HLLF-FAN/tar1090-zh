@@ -50,6 +50,7 @@ function createBaseLayers() {
         title: '高德地图-矢量',
         type: 'base',
     }));
+    
     mapmap.push(new ol.layer.Tile({
         source: new ol.source.XYZ({
             url: 'http://webst01.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_world&size=1&scale=1&style=6',
@@ -88,6 +89,7 @@ function createBaseLayers() {
         title: '天地图-卫星',
         type: 'base',
     }));
+    
     mapmap.push(new ol.layer.Tile({
         source: new ol.source.XYZ({
             url: 'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
