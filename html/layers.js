@@ -301,10 +301,23 @@ function createBaseLayers() {
             source: new ol.source.Vector({
                 url: url,
                 format: new ol.format.GeoJSON()
-            })
+            }),
+            style: function (feature) {
+                return new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: 'white',
+                        width: 2
+                    }),
+                    fill: new ol.style.Fill({
+                        color: 'transparent'
+                    })
+                });
+            }
         });
     };
-    mapmap.push(createGeoJsonLayer('机场内场', 'Airport in', 'geojson/airport.geojson', false));
+
+    fanmap.push(createGeoJsonLayer('机场内场', 'Airport in', 'geojson/airport.geojson', false));
+    fanmap.push(createGeoJsonLayer('行政区划', 'Administrative division', 'geojson/China.geojson', false));
 
 
     if (mapmap.getLength() > 0) {
