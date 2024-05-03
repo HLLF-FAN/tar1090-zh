@@ -8,6 +8,7 @@ function createBaseLayers() {
     });
 
     let mapmap = new ol.Collection();
+    let fanmap = new ol.Collection();
 
     const tileTransition = onMobile ? 0 : 150;
 
@@ -47,10 +48,9 @@ function createBaseLayers() {
             tilePixelRatio: 1,
         }),
         name: 'amap',
-        title: '高德地图-矢量',
+        title: '高德地图 - 矢量',
         type: 'base',
     }));
-    
     mapmap.push(new ol.layer.Tile({
         source: new ol.source.XYZ({
             url: 'http://webst01.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_world&size=1&scale=1&style=6',
@@ -60,7 +60,7 @@ function createBaseLayers() {
             tilePixelRatio: 1,
         }),
         name: 'amap-img',
-        title: '高德地图-卫星',
+        title: '高德地图 - 卫星',
         type: 'base',
     }));
 
@@ -73,7 +73,7 @@ function createBaseLayers() {
             tilePixelRatio: 1,
         }),
         name: 'tencent',
-        title: '腾讯地图-矢量',
+        title: '腾讯地图 - 矢量',
         type: 'base',
     }));
 
@@ -86,10 +86,23 @@ function createBaseLayers() {
             tilePixelRatio: 1,
         }),
         name: 'tianditu',
-        title: '天地图-卫星',
+        title: '天地图 - 卫星',
         type: 'base',
     }));
-    
+
+    mapmap.push(new ol.layer.Tile({
+        source: new ol.source.XYZ({
+            url: 'https://server.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}.png',
+            maxZoom: 18,
+            transition: tileTransition,
+            tileGrid: ol.tilegrid.createXYZ({ tileSize: 256, maxZoom: 18 }),
+            tilePixelRatio: 1,
+        }),
+        name: 'arcgis-street',
+        title: 'ArcGIS - 街道',
+        type: 'base',
+    }));
+
     mapmap.push(new ol.layer.Tile({
         source: new ol.source.XYZ({
             url: 'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
@@ -99,7 +112,32 @@ function createBaseLayers() {
             tilePixelRatio: 1,
         }),
         name: 'arcgis',
-        title: 'ArcGIS-卫星',
+        title: 'ArcGIS - 卫星',
+        type: 'base',
+    }));
+
+    mapmap.push(new ol.layer.Tile({
+        source: new ol.source.XYZ({
+            url: 'https://ga.aischina.com:8000/tiles/get?name=shading&x={x}&y={y}&z={z}',
+            maxZoom: 19,
+            transition: tileTransition,
+            tileGrid: ol.tilegrid.createXYZ({ tileSize: 256, maxZoom: 18 }),
+            tilePixelRatio: 1,
+        }),
+        name: 'shading',
+        title: '地形着色图',
+        type: 'base',
+    }));
+
+    mapmap.push(new ol.layer.Tile({
+        source: new ol.source.OSM({
+            "url": "https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}",
+            attributionsCollapsible: false,
+            maxZoom: 19,
+            transition: tileTransition,
+        }),
+        name: 'googlemap',
+        title: 'Google Map - 矢量地形渲染',
         type: 'base',
     }));
 
@@ -130,20 +168,6 @@ function createBaseLayers() {
 
     if (!adsbexchange) {
         mapmap.push(new ol.layer.Tile({
-            source: new ol.source.OSM({
-                "url": "https://{a-d}.tile.openstreetmap.de/{z}/{x}/{y}.png",
-                attributionsCollapsible: false,
-                maxZoom: 17,
-                transition: tileTransition,
-            }),
-            name: 'osm_de',
-            title: 'OpenStreetMap DE',
-            type: 'base',
-        }));
-    }
-
-    if (!adsbexchange) {
-        mapmap.push(new ol.layer.Tile({
             source: new ol.source.XYZ({
                 url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
                 attributions: 'Powered by <a href="https://www.esri.com">Esri.com</a>' +
@@ -158,44 +182,6 @@ function createBaseLayers() {
         }));
     }
 
-    if (!adsbexchange) {
-        mapmap.push(new ol.layer.Tile({
-            source: new ol.source.XYZ({
-                "url": "https://tiles.flightradar24.com/navdata_ha/{z}/{x}/{y}/tile.png",
-                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
-                attributionsCollapsible: false,
-                maxZoom: 19,
-                transition: tileTransition,
-            }),
-            name: 'navdata',
-            title: '航空导航数据',
-            type: 'overlay',
-            opacity: 0.7,
-            visible: false,
-            zIndex: 102,
-            maxZoom: 19,
-        }));
-    }
-
-    if (!adsbexchange) {
-        mapmap.push(new ol.layer.Tile({
-            source: new ol.source.XYZ({
-                "url": "https://tiles.flightradar24.com/atc_boundaries/{z}/{x}/{y}/tile.png",
-                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
-                attributionsCollapsible: false,
-                maxZoom: 19,
-                transition: tileTransition,
-            }),
-            name: 'navdata',
-            title: 'ATC边界',
-            type: 'overlay',
-            opacity: 0.7,
-            visible: false,
-            zIndex: 102,
-            maxZoom: 19,
-        }));
-    }
-    
     if (true) {
         const getRainviewerLayers = async function (key) {
             const response = await fetch("https://api.rainviewer.com/public/weather-maps.json", {
@@ -216,7 +202,7 @@ function createBaseLayers() {
             const latestLayer = await getRainviewerLayers('radar');
             const rainviewerRadarSource = new ol.source.XYZ({
                 url: 'https://tilecache.rainviewer.com/v2/radar/' + latestLayer.past[latestLayer.past.length - 1].time + '/512/{z}/{x}/{y}/4/1_1.png',
-                attributions: '<a href="https://www.rainviewer.com/api.html" target="_blank">RainViewer.com</a>',
+                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
                 attributionsCollapsible: false,
                 maxZoom: 20,
             });
@@ -224,7 +210,7 @@ function createBaseLayers() {
         };
         refreshRainviewerRadar();
         window.setInterval(refreshRainviewerRadar, 2 * 60 * 1000);
-        mapmap.push(rainviewerRadar);
+        fanmap.push(rainviewerRadar);
         const rainviewerClouds = new ol.layer.Tile({
             name: 'rainviewer_clouds',
             title: '实时气象云图',
@@ -237,7 +223,7 @@ function createBaseLayers() {
             const latestLayer = await getRainviewerLayers('satellite');
             const rainviewerCloudsSource = new ol.source.XYZ({
                 url: 'https://tilecache.rainviewer.com/' + latestLayer.infrared[latestLayer.infrared.length - 1].path + '/512/{z}/{x}/{y}/0/0_0.png',
-                attributions: '<a href="https://www.rainviewer.com/api.html" target="_blank">RainViewer.com</a>',
+                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
                 attributionsCollapsible: false,
                 maxZoom: 20,
             });
@@ -245,14 +231,14 @@ function createBaseLayers() {
         };
         refreshRainviewerClouds();
         window.setInterval(refreshRainviewerClouds, 2 * 60 * 1000);
-        mapmap.push(rainviewerClouds);
+        fanmap.push(rainviewerClouds);
     }
 
     if (!adsbexchange) {
-        mapmap.push(new ol.layer.Tile({
+        fanmap.push(new ol.layer.Tile({
             source: new ol.source.XYZ({
-                "url": "https://map.adsbexchange.com/mapproxy/tiles/1.0.0/openaip/ul_grid/{z}/{x}/{y}.png",
-                "attributions": "openAIP.net",
+                "url": "https://api.tiles.openaip.net/api/data/hotspots/{z}/{x}/{y}.png?apiKey=57212273f0c93d892b45e253d48c6de6",
+                attributions: '<a href="https://openAIP.net/" target="_blank">openAIP.net</a>',
                 attributionsCollapsible: false,
                 maxZoom: 12,
                 transition: tileTransition,
@@ -262,10 +248,11 @@ function createBaseLayers() {
             type: 'overlay',
             opacity: 0.7,
             visible: false,
-            zIndex: 99,
-            maxZoom: 13,
+            zIndex: 103,
+            maxZoom: 19,
         }));
     }
+
 
     if (loStore['bingKey'] != undefined)
         BingMapsAPIKey = loStore['bingKey'];
@@ -290,6 +277,139 @@ function createBaseLayers() {
             name: 'bing_roads',
             title: 'Bing Roads',
             type: 'base',
+        }));
+    }
+
+    if (!adsbexchange) {
+        fanmap.push(new ol.layer.Tile({
+            source: new ol.source.XYZ({
+                "url": "https://ga.aischina.com:8000/tiles/get?name=contour_line&x={x}&y={y}&z={z}",
+                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
+                attributionsCollapsible: false,
+                maxZoom: 19,
+                transition: tileTransition,
+            }),
+            name: 'contour_line',
+            title: '等高线数据',
+            type: 'overlay',
+            opacity: 0.7,
+            visible: false,
+            zIndex: 100,
+            maxZoom: 19,
+        }));
+    }
+
+    if (!adsbexchange) {
+        fanmap.push(new ol.layer.Tile({
+            source: new ol.source.XYZ({
+                "url": "https://ga.aischina.com:8000/tiles/get?name=country_border&x={x}&y={y}&z={z}",
+                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
+                attributionsCollapsible: false,
+                maxZoom: 19,
+                transition: tileTransition,
+            }),
+            name: 'country_border',
+            title: '边界',
+            type: 'overlay',
+            opacity: 0.7,
+            visible: false,
+            zIndex: 100,
+            maxZoom: 19,
+        }));
+    }
+
+    if (!adsbexchange) {
+        fanmap.push(new ol.layer.Tile({
+            source: new ol.source.XYZ({
+                "url": "https://ga.aischina.com:8000/tiles/get?name=basemap&x={x}&y={y}&z={z}",
+                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
+                attributionsCollapsible: false,
+                maxZoom: 19,
+                transition: tileTransition,
+            }),
+            name: 'basemap',
+            title: '路网注记',
+            type: 'overlay',
+            opacity: 0.7,
+            visible: false,
+            zIndex: 101,
+            maxZoom: 19,
+        }));
+    }
+
+    if (!adsbexchange) {
+        fanmap.push(new ol.layer.Tile({
+            source: new ol.source.XYZ({
+                "url": "https://webst01.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}",
+                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
+                attributionsCollapsible: false,
+                maxZoom: 19,
+                transition: tileTransition,
+            }),
+            name: 'country_border',
+            title: '路网注记 - 高德',
+            type: 'overlay',
+            opacity: 0.7,
+            visible: false,
+            zIndex: 101,
+            maxZoom: 19,
+        }));
+    }
+
+    if (!adsbexchange) {
+        fanmap.push(new ol.layer.Tile({
+            source: new ol.source.XYZ({
+                "url": "https://ga.aischina.com:8000/tiles/get?name=basemap_dot_and_note&&x={x}&y={y}&z={z}",
+                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
+                attributionsCollapsible: false,
+                maxZoom: 19,
+                transition: tileTransition,
+            }),
+            name: 'basemap_dot_and_note',
+            title: '地名注记',
+            type: 'overlay',
+            opacity: 0.7,
+            visible: false,
+            zIndex: 102,
+            maxZoom: 19,
+        }));
+    }
+
+    if (!adsbexchange) {
+        fanmap.push(new ol.layer.Tile({
+            source: new ol.source.XYZ({
+                "url": "https://tiles.flightradar24.com/navdata_ha/{z}/{x}/{y}/tile.png",
+                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
+                attributionsCollapsible: false,
+                maxZoom: 19,
+                transition: tileTransition,
+            }),
+            name: 'navdata',
+            title: '航空导航数据',
+            type: 'overlay',
+            opacity: 0.7,
+            visible: false,
+            zIndex: 102,
+            maxZoom: 19,
+        }));
+    }
+
+    if (!adsbexchange) {
+        fanmap.push(new ol.layer.Tile({
+            source: new ol.source.XYZ({
+                "url": "https://tiles.flightradar24.com/atc_boundaries/{z}/{x}/{y}/tile.png",
+                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
+                attributionsCollapsible: false,
+                maxZoom: 19,
+                transition: tileTransition,
+            }),
+            name: 'navdata',
+            title: 'ATC边界',
+            type: 'overlay',
+            opacity: 0.7,
+            visible: false,
+            zIndex: 102,
+            maxZoom: 19,
         }));
     }
 
@@ -328,6 +448,14 @@ function createBaseLayers() {
             title: '地图',
             layers: new ol.Collection(mapmap.getArray().reverse()),
             //fold: 'open',
+        }));
+    }
+    if (fanmap.getLength() > 0) {
+        layers.push(new ol.layer.Group({
+            name: 'fanmap',
+            title: '可控制底图',
+            layers: new ol.Collection(fanmap.getArray().reverse()),
+            fold: 'open',
         }));
     }
 
