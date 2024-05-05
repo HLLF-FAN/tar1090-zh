@@ -92,19 +92,6 @@ function createBaseLayers() {
 
     mapmap.push(new ol.layer.Tile({
         source: new ol.source.XYZ({
-            url: 'https://server.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}.png',
-            maxZoom: 18,
-            transition: tileTransition,
-            tileGrid: ol.tilegrid.createXYZ({ tileSize: 256, maxZoom: 18 }),
-            tilePixelRatio: 1,
-        }),
-        name: 'arcgis-street',
-        title: 'ArcGIS - 街道',
-        type: 'base',
-    }));
-
-    mapmap.push(new ol.layer.Tile({
-        source: new ol.source.XYZ({
             url: 'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
             maxZoom: 18,
             transition: tileTransition,
@@ -113,6 +100,19 @@ function createBaseLayers() {
         }),
         name: 'arcgis',
         title: 'ArcGIS - 卫星',
+        type: 'base',
+    }));
+
+    mapmap.push(new ol.layer.Tile({
+        source: new ol.source.XYZ({
+            url: 'https://server.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}.png',
+            maxZoom: 18,
+            transition: tileTransition,
+            tileGrid: ol.tilegrid.createXYZ({ tileSize: 256, maxZoom: 18 }),
+            tilePixelRatio: 1,
+        }),
+        name: 'arcgis-street',
+        title: 'ArcGIS - 街道',
         type: 'base',
     }));
 
