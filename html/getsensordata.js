@@ -28,7 +28,7 @@ function updateData() {
 setInterval(updateData, 1000);
 
 function callAPI() {
-  fetch('https://api.fanstudio.tech:60225/aviation/metartaf.php?airport=这里填你要查询的机场ICAO码')
+  fetch('https://api.fanstudio.tech:60225/feeyo/metartaf.php?airport=这里填你要查询的机场ICAO码')
     .then(response => response.json())
     .then(data => {
       const metar = data.metar;
@@ -51,7 +51,7 @@ callAPI();
 setInterval(callAPI, 3600000);
 
 function updateDeviceData() {
-  fetch('https://api.fanstudio.tech:60225/feeyo/test/device-data.php?uuid=这里填你的站点uuid')
+  fetch('https://api.fanstudio.tech:60225/feeyo/device-data.php?uuid=这里填你的站点uuid')
     .then(response => response.json())
     .then(data => {
       const message_count = data.data[0].message_count;
@@ -73,9 +73,9 @@ function updateDeviceData() {
 updateDeviceData();
 
 // 当前版本号
-const currentVersion = "24.05.03";
+const currentVersion = "24.05.05";
 
-fetch('https://api.fanstudio.tech:60225/feeyo/test/tar1090-ver.php')
+fetch('https://api.fanstudio.tech:60225/feeyo/tar1090-ver.php')
     .then(response => response.json())
     .then(data => {
         const latestVersion = data.version;
