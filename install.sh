@@ -111,7 +111,11 @@ if ! { [[ "$1" == "test" ]] && cd "$ipath/git-db"; }; then
     getGIT "$db_repo" "master" "$ipath/git-db" || true
 fi
 
-
+if ! cd "$ipath/git-db"
+then
+    echo "Unable to download files, exiting! (Maybe try again?)"
+    exit 1
+fi
 
 DB_VERSION=$(revision)
 
