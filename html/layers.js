@@ -144,24 +144,26 @@ function createBaseLayers() {
     if (adsbexchange) {
         mapmap.push(new ol.layer.Tile({
             source: new ol.source.OSM({
-                "url": "https://map.adsbexchange.com/mapproxy/tiles/1.0.0/osm/osm_grid/{z}/{x}/{y}.png",
-                attributionsCollapsible: false,
-                maxZoom: 16,
-                transition: tileTransition,
-            }),
-            name: 'osm_adsbx',
-            title: 'OpenStreetMap ADSBx',
-            type: 'base',
-        }));
-    } else {
-        mapmap.push(new ol.layer.Tile({
-            source: new ol.source.OSM({
                 maxZoom: 17,
                 attributionsCollapsible: false,
                 transition: tileTransition,
             }),
             name: 'osm',
             title: 'OpenStreetMap',
+            type: 'base',
+        }));
+    }
+
+    if (!adsbexchange) {
+        mapmap.push(new ol.layer.Tile({
+            source: new ol.source.OSM({
+                "url" : "https://{a-d}.tile.openstreetmap.de/{z}/{x}/{y}.png",
+                attributionsCollapsible: false,
+                maxZoom: 17,
+                transition: tileTransition,
+            }),
+            name: 'osm_de',
+            title: 'OpenStreetMap DE',
             type: 'base',
         }));
     }
