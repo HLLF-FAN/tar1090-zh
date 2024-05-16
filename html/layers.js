@@ -118,6 +118,19 @@ function createBaseLayers() {
 
     mapmap.push(new ol.layer.Tile({
         source: new ol.source.XYZ({
+            url: 'https://a.tile.opentopomap.org/{z}/{x}/{y}.png',
+            maxZoom: 19,
+            transition: tileTransition,
+            tileGrid: ol.tilegrid.createXYZ({ tileSize: 256, maxZoom: 19 }),
+            tilePixelRatio: 1,
+        }),
+        name: 'opentopomap',
+        title: 'OpenTopoMap地形图',
+        type: 'base',
+    }));
+
+    mapmap.push(new ol.layer.Tile({
+        source: new ol.source.XYZ({
             url: 'https://ga.aischina.com:8000/tiles/get?name=shading&x={x}&y={y}&z={z}',
             maxZoom: 19,
             transition: tileTransition,
