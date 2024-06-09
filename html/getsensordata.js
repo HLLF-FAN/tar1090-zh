@@ -73,7 +73,7 @@ function updateDeviceData() {
 updateDeviceData();
 
 // 当前版本号
-const currentVersion = "24.05.16";
+const currentVersion = "24.06.09";
 
 fetch('https://api.fanstudio.tech/feeyo/tar1090-ver.php')
     .then(response => response.json())
