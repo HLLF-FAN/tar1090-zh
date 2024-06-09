@@ -41,6 +41,17 @@ function createBaseLayers() {
 
     mapmap.push(new ol.layer.Tile({
         source: new ol.source.XYZ({
+            "url": "https://maprastertile-drcn.dbankcdn.cn/display-service/v1/online-render/getTile/24.04.26.17300/{z}/{x}/{y}/?language=zh&p=46&scale=1&mapType=ROADMAP&presetStyleId=night&key=DAEDANitav6P7Q0lWzCzKkLErbrJG4kS1u%2FCpEe5ZyxW5u0nSkb40bJ%2BYAugRN03fhf0BszLS1rCrzAogRHDZkxaMrloaHPQGO6LNg%3D%3D",
+            maxZoom: 19,
+            transition: tileTransition,
+        }),
+        name: 'petalmap',
+        title: 'PetalMap',
+        type: 'base',
+    }));
+
+    mapmap.push(new ol.layer.Tile({
+        source: new ol.source.XYZ({
             url: 'http://webst01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scl=1&style=7&x={x}&y={y}&z={z}',
             maxZoom: 18,
             transition: tileTransition,
@@ -143,14 +154,15 @@ function createBaseLayers() {
     }));
 
     mapmap.push(new ol.layer.Tile({
-        source: new ol.source.OSM({
-            "url": "https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}",
-            attributionsCollapsible: false,
+        source: new ol.source.XYZ({
+            url: 'https://tiles.windy.com/tiles/v10.0/darkmap-retina/{z}/{x}/{y}.png',
             maxZoom: 19,
             transition: tileTransition,
+            tileGrid: ol.tilegrid.createXYZ({ tileSize: 256, maxZoom: 18 }),
+            tilePixelRatio: 1,
         }),
-        name: 'googlemap',
-        title: 'Google Map - 矢量地形渲染',
+        name: 'windymap',
+        title: '地形未着色图',
         type: 'base',
     }));
 
