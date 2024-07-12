@@ -405,6 +405,24 @@ function createBaseLayers() {
     if (!adsbexchange) {
         fanmap.push(new ol.layer.Tile({
             source: new ol.source.XYZ({
+                "url": "https://x-plane.cleverest.eu/tile.php?09eba7cf2b87d0c5c52a2d9efabe13e3_{x}_{y}_{z}",
+                attributionsCollapsible: false,
+                maxZoom: 19,
+                transition: tileTransition,
+            }),
+            name: 'airport',
+            title: '机场注记',
+            type: 'overlay',
+            opacity: 0.7,
+            visible: false,
+            zIndex: 101,
+            maxZoom: 19,
+        }));
+    }
+
+    if (!adsbexchange) {
+        fanmap.push(new ol.layer.Tile({
+            source: new ol.source.XYZ({
                 "url": "https://tiles.flightradar24.com/navdata_ha/{z}/{x}/{y}/tile.png",
                 attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
                 attributionsCollapsible: false,
