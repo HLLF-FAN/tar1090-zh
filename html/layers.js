@@ -162,7 +162,7 @@ function createBaseLayers() {
             tilePixelRatio: 1,
         }),
         name: 'windymap',
-        title: '地形未着色图',
+        title: '轮廓与地形',
         type: 'base',
     }));
 
