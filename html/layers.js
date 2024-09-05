@@ -208,8 +208,6 @@ function createBaseLayers() {
         mapmap.push(new ol.layer.Tile({
             source: new ol.source.XYZ({
                 url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-                attributions: 'Powered by <a href="https://www.esri.com">Esri.com</a>' +
-                    '— Sources: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
                 attributionsCollapsible: false,
                 maxZoom: 17,
                 transition: tileTransition,
@@ -240,7 +238,6 @@ function createBaseLayers() {
             const latestLayer = await getRainviewerLayers('radar');
             const rainviewerRadarSource = new ol.source.XYZ({
                 url: 'https://tilecache.rainviewer.com/v2/radar/' + latestLayer.past[latestLayer.past.length - 1].time + '/512/{z}/{x}/{y}/4/1_1.png',
-                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
                 attributionsCollapsible: false,
                 maxZoom: 20,
             });
@@ -261,7 +258,6 @@ function createBaseLayers() {
             const latestLayer = await getRainviewerLayers('satellite');
             const rainviewerCloudsSource = new ol.source.XYZ({
                 url: 'https://tilecache.rainviewer.com/' + latestLayer.infrared[latestLayer.infrared.length - 1].path + '/512/{z}/{x}/{y}/0/0_0.png',
-                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
                 attributionsCollapsible: false,
                 maxZoom: 20,
             });
@@ -276,7 +272,6 @@ function createBaseLayers() {
         fanmap.push(new ol.layer.Tile({
             source: new ol.source.XYZ({
                 "url": "https://api.tiles.openaip.net/api/data/hotspots/{z}/{x}/{y}.png?apiKey=57212273f0c93d892b45e253d48c6de6",
-                attributions: '<a href="https://openAIP.net/" target="_blank">openAIP.net</a>',
                 attributionsCollapsible: false,
                 maxZoom: 12,
                 transition: tileTransition,
@@ -322,7 +317,6 @@ function createBaseLayers() {
         fanmap.push(new ol.layer.Tile({
             source: new ol.source.XYZ({
                 "url": "https://ga.aischina.com:8000/tiles/get?name=contour_line&x={x}&y={y}&z={z}",
-                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
                 attributionsCollapsible: false,
                 maxZoom: 19,
                 transition: tileTransition,
@@ -341,7 +335,6 @@ function createBaseLayers() {
         fanmap.push(new ol.layer.Tile({
             source: new ol.source.XYZ({
                 "url": "https://ga.aischina.com:8000/tiles/get?name=country_border&x={x}&y={y}&z={z}",
-                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
                 attributionsCollapsible: false,
                 maxZoom: 19,
                 transition: tileTransition,
@@ -360,7 +353,6 @@ function createBaseLayers() {
         fanmap.push(new ol.layer.Tile({
             source: new ol.source.XYZ({
                 "url": "https://ga.aischina.com:8000/tiles/get?name=basemap&x={x}&y={y}&z={z}",
-                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
                 attributionsCollapsible: false,
                 maxZoom: 19,
                 transition: tileTransition,
@@ -379,7 +371,6 @@ function createBaseLayers() {
         fanmap.push(new ol.layer.Tile({
             source: new ol.source.XYZ({
                 "url": "https://webst01.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}",
-                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
                 attributionsCollapsible: false,
                 maxZoom: 19,
                 transition: tileTransition,
@@ -398,7 +389,6 @@ function createBaseLayers() {
         fanmap.push(new ol.layer.Tile({
             source: new ol.source.XYZ({
                 "url": "https://ga.aischina.com:8000/tiles/get?name=basemap_dot_and_note&&x={x}&y={y}&z={z}",
-                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
                 attributionsCollapsible: false,
                 maxZoom: 19,
                 transition: tileTransition,
@@ -435,7 +425,6 @@ function createBaseLayers() {
         fanmap.push(new ol.layer.Tile({
             source: new ol.source.XYZ({
                 "url": "https://tiles.flightradar24.com/navdata_ha/{z}/{x}/{y}/tile.png",
-                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
                 attributionsCollapsible: false,
                 maxZoom: 19,
                 transition: tileTransition,
@@ -454,7 +443,6 @@ function createBaseLayers() {
         fanmap.push(new ol.layer.Tile({
             source: new ol.source.XYZ({
                 "url": "https://tiles.flightradar24.com/atc_boundaries/{z}/{x}/{y}/tile.png",
-                attributions: '<a href="https://www.fan0225.top:60225/" target="_blank">FAN Studio</a>',
                 attributionsCollapsible: false,
                 maxZoom: 19,
                 transition: tileTransition,
