@@ -28,11 +28,11 @@ function updateData() {
 setInterval(updateData, 1000);
 
 function callAPI() {
-  fetch('https://api.fanstudio.tech/feeyo/metartaf.php?airport=这里填你要查询的机场ICAO码')
+  fetch('https://api.fanstudio.tech/feeyo/weather.php?airport=这里填你要查询的机场IATA码')
     .then(response => response.json())
     .then(data => {
-      const metar = data.metar;
-      const taf = data.taf;
+      const metar = data.METAR;
+      const taf = data.TAF;
 
       console.log('METAR:', metar);
       console.log('TAF:', taf);
