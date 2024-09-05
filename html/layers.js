@@ -45,8 +45,8 @@ function createBaseLayers() {
             maxZoom: 19,
             transition: tileTransition,
         }),
-        name: 'petalmap(暗)',
-        title: 'PetalMap',
+        name: 'petalmap',
+        title: 'PetalMap(暗)',
         type: 'base',
     }));
 
@@ -56,8 +56,8 @@ function createBaseLayers() {
             maxZoom: 19,
             transition: tileTransition,
         }),
-        name: 'petalmap(亮)',
-        title: 'PetalMap2',
+        name: 'petalmap2',
+        title: 'PetalMap(亮)',
         type: 'base',
     }));
 
