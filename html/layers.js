@@ -45,8 +45,19 @@ function createBaseLayers() {
             maxZoom: 19,
             transition: tileTransition,
         }),
-        name: 'petalmap',
+        name: 'petalmap(暗)',
         title: 'PetalMap',
+        type: 'base',
+    }));
+
+    mapmap.push(new ol.layer.Tile({
+        source: new ol.source.XYZ({
+            "url": "https://maprastertile-drcn.dbankcdn.cn/display-service/v1/online-render/getTile/23.12.09.11/{z}/{x}/{y}/?language=zh&p=46&scale=2&mapType=ROADMAP&presetStyleId=standard&pattern=JPG&key=DAEDANitav6P7Q0lWzCzKkLErbrJG4kS1u%2FCpEe5ZyxW5u0nSkb40bJ%2BYAugRN03fhf0BszLS1rCrzAogRHDZkxaMrloaHPQGO6LNg==",
+            maxZoom: 19,
+            transition: tileTransition,
+        }),
+        name: 'petalmap(亮)',
+        title: 'PetalMap2',
         type: 'base',
     }));
 
