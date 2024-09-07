@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<title>ADS-B接收器监控（测试中）</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="favicon.png"/>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+		integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+		crossorigin="" />
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+		integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+		crossorigin=""></script>
+	<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css'
+		rel='stylesheet' />
+	<link rel="stylesheet" href="map_monitor.css" />
+	<!-- <script>
+		document.addEventListener('keydown', function (e) {
+			if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+				e.preventDefault();
+			}
+		});
+	</script> -->
+</head>
+
+<body>
+	<h3>ADS-B接收器监控（测试中）</h3>
+	<div id="main">
+		<table class="main-table">
+			<tr>
+				<tbody>
+					<td class="main-left">
+						<div class="flight-director" id="fd">
+							<canvas class="fd-canvas-style" id="fd-canvas" height="400" width="460"></canvas>
+						</div>
+						<div id="mapid">
+							<canvas id="map-alti-bar" height="500" width="130" class="alti-bar"></canvas>
+							<img id="map-preview" />
+							<table id="map-stat-info" cellspacing="0" cellpadding="0">
+								<tr>
+									<th id="map-stat-head-label" class="map-stat-head" title="Receiver">#</th>
+									<th id="map-stat-rate" class="map-stat-head"
+										title="Messages/second received during last 1 min">Msg Rate</th>
+									<th id="map-stat-snr" class="map-stat-head"
+										title="Signal to Noise ratio during last 1 min">SNR</th>
+									<th id="map-stat-snr" class="map-stat-head"
+										title="Peak signal level during last 1 min">Peak</th>
+									<th id="map-stat-strong" class="map-stat-head"
+										title="Percentage of strong signals during last 1 min">Strong%</th>
+									<th id="map-stat-ac-with-pos" class="map-stat-head-ac"
+										title="Aircrafts with position messages">AC w/pos</th>
+									<th id="map-stat-ac-no-pos" class="map-stat-head-ac"
+										title="Aircrafts without any position messages">No pos</th>
+								</tr>
+								<tr>
+									<td id="map-stat-label1">-</th>
+									<td id="map-stat-rate1">-</td>
+									<td id="map-stat-snr1">-</td>
+									<td id="map-stat-peak1">-</td>
+									<td id="map-stat-strong1">-</td>
+									<td id="map-stat-ac-with-pos1">-</td>
+									<td id="map-stat-ac-no-pos1">-</td>
+								</tr>
+								<tr>
+									<td id="map-stat-label2">-</th>
+									<td id="map-stat-rate2">-</td>
+									<td id="map-stat-snr2">-</td>
+									<td id="map-stat-peak2">-</td>
+									<td id="map-stat-strong2">-</td>
+									<td id="map-stat-ac-with-pos2">-</td>
+									<td id="map-stat-ac-no-pos2">-</td>
+								</tr>
+							</table>
+							<table id="map-ac-info" cellspacing="0" cellpadding="0">
+								<tr>
+									<td id="map-ac-info-img" colspan="2"><img id="map-ac-info-img-src" src="" /><span
+											id="map-ac-info-img-attr"></span></td>
+								</tr>
+								<tr>
+									<td id="map-ac-info-flight" title="Flight / callsign">-</td>
+									<td id="map-ac-info-hex" title="ICAO hex">-</td>
+								</tr>
+								<tr>
+									<td id="map-ac-info-route" title="Route">-</td>
+									<td id="map-ac-info-reg" title="Registration">-</td>
+								</tr>
+								<tr>
+									<td id="map-ac-info-manufacturer">-</td>
+									<td id="map-ac-info-type">-</td>
+								</tr>
+								<tr>
+									<td id="map-ac-info-owner" colspan="2" title="Owner">-</td>
+								</tr>
+								<tr>
+									<td id="map-ac-info-lat" title="Latitude">-</td>
+									<td id="map-ac-info-lon" title="Longitude">-</td>
+								</tr>
+								<tr>
+									<td id="map-ac-info-track" title="Track">-</td>
+									<td id="map-ac-info-squawk" title="Squawk">-</td>
+								</tr>
+								<tr>
+									<td id="map-ac-info-altitude">- ft</td>
+									<td id="map-ac-info-rate">- ft/min</td>
+								</tr>
+								<tr>
+									<td id="map-ac-info-tas">TAS: - kn</td>
+									<td id="map-ac-info-gs">GS: - kn</td>
+								</tr>
+								<tr>
+									<td id="map-ac-info-rssi">- dBi</td>
+									<td id="map-ac-info-msgs">- msgs</td>
+								</tr>
+								<tr>
+									<td id="map-ac-info-seen" colspan="2" title="Seen">-s ago</td>
+								</tr>
+							</table>
+						</div>
+						<div id="airports" class="airports-lists">
+							<table id="runways" class="runway-list" cellspacing="0">
+								<thead id="runways-head" class="runway-list-header"></thead>
+								<tbody id="runways-body" class="runway-list-body"></tbody>
+							</table>
+						</div>
+					</td>
+					<td class="main-center">
+						<div class="alti-bar-header">
+							<span style="padding-left: 13px;">FL</span><span style="padding-left: 33px;">Alt</span><span
+								style="padding-left: 15px;">Flight</span>
+						</div>
+						<div class="alti-bar-div">
+							<canvas id="alti-bar" height="500" width="130" class="alti-bar"></canvas>
+						</div>
+						<div class="company-list-div">
+							<table class="company-list" id="company" cellspacing="0">
+								<thead id="company-head" class="company-header"></thead>
+								<tbody id="company-body"></tbody>
+							</table>
+						</div>
+					</td>
+					<td class="main-right">
+						<div id="info" class="info-div">
+							<table id="stats" class="stats-list" cellspacing="0">
+								<thead id="stats-head" class="stats-list-head"></thead>
+								<tbody id="stats-body" class="stats-list-body"></tbody>
+								<tfoot id="stats-footer" class="stats-list-footer"></tfoot>
+							</table>
+							<div class="stats-display-place">
+								<canvas id="stats-display" class="stats-display-canvas" height="80"
+									width="450"></canvas>
+							</div>
+							<div class="ecam-display-place">
+								<input type="text" class="ecam-warm-display" id="ecam-display" readonly>
+							</div>
+							<div class="filter-place">
+								<span id="filter-checkboxes" class="filters">
+									<label class="form-control">
+										<input type="button" id="btn-reset-map-pos" class="btn-reset-map"
+											onClick="resetMapPosition()" value="Reset Map">
+									</label>
+									<label class="form-control">
+										<input type="checkbox" id="cb-FD-enabled" onClick="switchFD()" value="FD">
+										VirtFD
+									</label>
+									<label class="form-control">
+										<input type="checkbox" id="cb-filter-map" onClick="checkFilters()" value="MAP"
+											class="cb-map"> Only map
+									</label>
+									<label class="form-control">
+										<div class="map-distance">
+											<span id="cb-filter-map-distance">---</span> km / <span
+												id="cb-filter-map-distance-miles">---</span> nmi
+										</div>
+									</label>
+									<label class="form-control" id="airports-cb" value="RWYS">
+									</label>
+									<label class="form-control">
+										<input type="checkbox" class="receiver-details" id="receiver-details-cb"
+											value="RDE" onclick="receiverDetailsChange()" checked> Details&nearr;
+									</label>
+								</span>
+							</div>
+							<table id="aircrafts" class="ac-list" cellspacing="0">
+								<thead id="aircrafts-head" class="ac-list-head"></thead>
+								<tbody id="aircrafts-body" class="ac-list-body"></tbody>
+								<tfoot id="aircrafts-footer" class="ac-list-footer"></tfoot>
+							</table>
+						</div>
+					</td>
+					<td class="additional-page-right" id="additional-page-right-id">
+						<div id="receiver-circular-info" class="receiver-circular-info-div">
+							<span class="section-title">Receiver Distances / Direction</span>
+							<table>
+								<tbody style="color: #ffffff;">
+									<tr>
+										<td><canvas id="receiver-circular-canvas" height="320" width="300"
+												class="receiver-circular-canvas"></canvas></td>
+										<td class="receiver-circular-actions">
+											<span class="circular-action-text">JPEG</span><br />
+											<input type="button" id="btn-receiver-circular-download"
+												class="btn-receiver-download" value="Download"
+												onClick="downloadReceiverChart()" />
+											<a id="download-chart-url" href="" style="display: none;"
+												target="_blank"></a><br />
+											<span class="circular-action-text">PNG</span><br />
+											<input type="button" id="btn-receiver-circular-download-png"
+												class="btn-receiver-download" value="Download"
+												onClick="downloadReceiverChartPNG()" /><br />
+											<a id="download-chart-url" href="" style="display: none;"
+												target="_blank"></a><br />
+											<span class="circular-action-text">Display</span><br />
+											<input type="checkbox" class="receiver-details-RSSI"
+												id="receiver-details-RSSI-cb" value="RSSI"
+												onclick="receiverDetailsRSSIChange()" checked>
+											<br />&darr;<br />
+											<input type="checkbox" class="receiver-details-main"
+												id="receiver-details-main-cb" value="MAIN"
+												onclick="receiverDetailsMainChange()" checked>
+											<br />&#215;<br />
+											<input type="checkbox" class="receiver-details-supplementary"
+												id="receiver-details-supplementary-cb" value="SUPP"
+												onclick="receiverDetailsSuppChange()" checked>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div id="receiver-altitude-info" class="receiver-altitude-info-div">
+							<span class="section-title">Minimum Altitude / Distance</span>
+							<canvas id="receiver-altitude-canvas" height="220" width="410"
+								class="receiver-altitude-canvas"></canvas>
+						</div>
+					</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+	<script src="config.js" type="application/javascript"></script>
+	<script src="utils.js" type="application/javascript"></script>
+	<script src="map_main.js" type="application/javascript"></script>
+	<script src="general_button_ctrl.js" type="application/javascript"></script>
+	<script src="weathermap.js" type="application/javascript"></script>
+	<script src="altibar.js" type="application/javascript"></script>
+	<script src="filters.js" type="application/javascript"></script>
+	<script src="vfd.js" type="application/javascript"></script>
+	<script src="company_callsigns.js" type="application/javascript"></script>
+	<script src="aircrafts.js" type="application/javascript"></script>
+	<script src="stats.js" type="application/javascript"></script>
+	<script src="runways.js" type="application/javascript"></script>
+	<script src="receiverdetails.js" type="application/javascript"></script>
+	<script src="company_list.js" type="application/javascript"></script>
+	<script>
+		// Originally written by Juho Einiö 2021
+		// Just enter your own receiver domain, location and MapBox (public) access token in config.js
+
+		// 2021 Oct 26th 	- FD pitch calculation unfinished & wrong
+		//					- Clicking callsign / locking FD to one aircraft freezees FD
+		//					- FD altitude "roller" doesn't work correctly yet
+		//					- scroll of the aircraft table needs to be done - if the list is growing bigger, every update returns to top
+		// 2021 Oct 30th	- Cleaned up the aircraft table a bit, still some work to do with it. Might help with the scrolling also.
+		//					- Also cleaned up a bit the ali-bar graph.
+		//					- Added feature: filtering by the visible map (using lateral distance of map)
+		// 2021 Oct 31st	- Added feature: secondary supplementary receiver appends information the primary receiver has
+		//					- still to be done: secondary receiver only aircraft are not displayed
+		//					- Added totals to stats, secondary receiver red circle and ac seen older than 1 min with red overstrike
+		// 2021 Nov 1st		- Added FD enable/disable checkbox, extended the list of callsigns
+		//					- Added ATC call phrases to title element of callsign and squawk
+		//					- Added openweathermap.org functionality for winds, clouds and rain + opacity slider for it
+		//					- some appearance changes
+		// 2021 Nov 2nd		- Added airports (credits for list to ourairports.com - see ourairports.com/data for more lists)
+		// ...
+		// See readme for more history
+
+	</script>
+</body>
+
+</html>
