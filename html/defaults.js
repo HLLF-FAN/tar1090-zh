@@ -29,10 +29,10 @@ let DisplayUnits = "nautical";
 // degrees.
 
 // Default center of the map.
-let DefaultCenterLat = 40.56;
-let DefaultCenterLon = -73.66
+let DefaultCenterLat = 37.093496518166944;
+let DefaultCenterLon = 107.79942839007867
 // The google maps zoom level, 0 - 16, lower is further out
-let DefaultZoomLvl   = 9;
+let DefaultZoomLvl   = 4;
 
 let autoselectCoords = null;
 
@@ -44,7 +44,7 @@ let showGrid = false;
 let SiteShow    = true;           // true to show a center marker
 let SiteLat     = null;            // position of the marker
 let SiteLon     = null;
-let SiteName    = "My Radar Site"; // tooltip of the marker
+let SiteName    = "ADSB"; // tooltip of the marker
 
 // Update GPS location (keep map centered on GPS location)
 let updateLocation = false;
