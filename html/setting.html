@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="images/tar1090-favicon.png">
+    <title>ADSB 设备配置页</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+
+        .section h2 {
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 200px;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #004da0;
+            transform: translateY(-1px);
+        }
+
+        .alert {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            display: none;
+            font-weight: bold;
+        }
+
+        .alert.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .info-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            /* 垂直居中对齐 */
+            padding: 10px 0;
+            /* 上下内边距 */
+        }
+
+        .info-item {
+            flex: 1;
+            /* 使每个信息项占据相同的空间 */
+            text-align: center;
+            /* 文本居中 */
+        }
+
+        .info-item strong {
+            display: block;
+            /* 使强文本在新行显示 */
+            margin-bottom: 5px;
+            /* 下边距 */
+            font-size: 1.1em;
+            /* 字体大小 */
+        }
+    </style>
+    <script>
+        const BASE_URL = `${window.location.protocol}//${window.location.hostname}:5000`;
+
+        async function fetchUUID() {
+            const response = await fetch(`${BASE_URL}/api/get_uuid`);
+            const data = await response.json();
+            document.getElementById('uuid').innerText = data.uuid;
+        }
+
+        function isValidUUID(uuid) {
+            const uuidPattern = /^[0-9a-fA-F]{16}$/;
+            return uuidPattern.test(uuid);
+        }
+
+        async function updateUUID() {
+            const newUUID = document.getElementById('new_uuid').value;
+            if (!isValidUUID(newUUID)) {
+                showAlert('请输入有效的 16 位 UUID!', 'error');
+                return;
+            }
+            const response = await fetch(`${BASE_URL}/api/update_uuid`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ uuid: newUUID })
+            });
+            const data = await response.json();
+            showAlert(data.message, data.error ? 'error' : 'success');
+            fetchUUID();
+        }
+
+        async function fetchIATA() {
+            const response = await fetch(`${BASE_URL}/api/get_iata`);
+            const data = await response.json();
+            document.getElementById('iata').innerText = data.iata;
+        }
+
+        function isValidIATA(iata) {
+            const iataPattern = /^[A-Z]{3}$/;
+            return iataPattern.test(iata);
+        }
+
+        async function updateIATA() {
+            const newIATA = document.getElementById('new_iata').value;
+            if (!isValidIATA(newIATA)) {
+                showAlert('请输入有效的 3 位大写 IATA 机场码!', 'error');
+                return;
+            }
+            const response = await fetch(`${BASE_URL}/api/update_iata`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ iata: newIATA })
+            });
+            const data = await response.json();
+            showAlert(data.message, data.error ? 'error' : 'success');
+        }
+
+        async function setLocation() {
+            const latitude = document.getElementById('latitude').value;
+            const longitude = document.getElementById('longitude').value;
+            const response = await fetch(`${BASE_URL}/api/set_location`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ latitude, longitude })
+            });
+            const data = await response.json();
+            showAlert(data.message, data.error ? 'error' : 'success');
+        }
+
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('alert');
+            alertBox.innerText = message;
+            alertBox.className = `alert ${type}`;
+            alertBox.style.display = 'block';
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 3000);
+        }
+
+        window.onload = function () {
+            fetchUUID();
+            fetchIATA();
+        };
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>ADSB 设备配置页</h1>
+        <div class="section">
+            <h2>当前信息:</h2>
+            <div class="info-container">
+                <div class="info-item">
+                    <strong>UUID:</strong>
+                    <p id="uuid">加载中...</p>
+                </div>
+                <div class="info-item">
+                    <strong>当前机场:</strong>
+                    <p id="iata">加载中...</p>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <h2>设置位置:</h2>
+            <input type="text" id="latitude" placeholder="输入纬度">
+            <input type="text" id="longitude" placeholder="输入经度">
+            <button onclick="setLocation()">更新位置</button>
+        </div>
+        <div class="section">
+            <h2>修改 UUID:</h2>
+            <input type="text" id="new_uuid" placeholder="输入新的 UUID">
+            <button onclick="updateUUID()">提交</button>
+        </div>
+        <div class="section">
+            <h2>设置机场:</h2>
+            <input type="text" id="new_iata" placeholder="输入新的 IATA 机场码">
+            <button onclick="updateIATA()">提交</button>
+        </div>
+        <div id="alert" class="alert"></div>
+    </div>
+</body>
+
+</html>
